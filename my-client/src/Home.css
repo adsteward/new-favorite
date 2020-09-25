@@ -1,0 +1,76 @@
+.track-col {
+  /* width: 50%; */
+  border: 2px solid white;
+  margin: 5px;
+  border-radius: 5px;
+
+  /* background-color: rgb(62, 62, 62); */
+}
+
+.pair-row {
+}
+
+.tracks-col {
+  padding: 0;
+  /* width: 75%; */
+}
+
+.tracks-row {
+}
+
+.Home {
+  background-color: #053225;
+  margin: 0;
+}
+
+/* button {
+  margin: 1rem;
+} */
+
+.slider-label {
+  color: white;
+}
+
+.filter-col {
+  background-color: #60a561;
+  border: 3px solid white;
+  /* border: 5px solid #e34a6f; */
+  border-radius: 5px;
+  color: white;
+  /* font-weight: bold; */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.label-col {
+  color: white;
+  text-align: center;
+}
+
+.btn-primary,
+.btn-primary:active,
+.btn-primary:visited,
+.btn-primary:focus {
+  background-color: #e34a6f;
+  border-color: #e34a6f;
+}
+
+.btn-primary:hover {
+  background-color: #e34a6f;
+  border-color: #e34a6f;
+  filter: brightness(90%);
+}
+
+.btn-secondary,
+.btn-secondary:active,
+.btn-secondary:visited,
+.btn-secondary:focus {
+  background-color: #f7b2bd;
+  border-color: #f7b2bd;
+}
+
+.btn-secondary:hover {
+  background-color: #f7b2bd;
+  border-color: #f7b2bd;
+  filter: brightness(90%);
+}

@@ -1,0 +1,19 @@
+.album-col {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-col {
+  margin-top: 1rem;
+  color: white;
+  font-size: small;
+  font-weight: 500;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}

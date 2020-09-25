@@ -1,0 +1,17 @@
+{
+  "author": "Adeline Steward-Nolan",
+  "name": "so-close-spot",
+  "description": "",
+  "version": "1.0.0",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.4",
+    "express": "~4.16.0",
+    "querystring": "~0.2.0",
+    "request": "~2.83.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "heroku-postbuild": "cd my-client && npm install && npm run build"
+  }
+}

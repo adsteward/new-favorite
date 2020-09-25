@@ -7,8 +7,8 @@ import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import "bootstrap-slider/dist/css/bootstrap-slider.css";
-import $ from "jquery";
-import Popper from "popper.js";
+// import $ from "jquery";
+// import Popper from "popper.js";
 import App from "./App";
 
 ReactDOM.render(

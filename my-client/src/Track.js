@@ -19,6 +19,7 @@ class Track extends React.Component {
           <img
             src={this.state.img}
             onLoad={this.handleImgLoaded.bind(this)}
+            alt="album art"
           ></img>
         </div>
         <div className="col-md-8 text-col">

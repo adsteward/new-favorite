@@ -17,11 +17,15 @@ class Home extends React.Component {
       allYourTracks: [],
       topTracks: [],
       timeFrame: "6 Months",
-      energy: null,
-      dance: null,
-      acoustic: null,
-      popular: null,
+      energy: 50,
+      dance: 50,
+      acoustic: 50,
+      popular: 50,
       isTracksRetrieved: false,
+      energyChanged: false,
+      danceChanged: false,
+      acousticChanged: false,
+      popularChanged: false,
       // { title, artist, album art}
     };
     this.changeTimeFrame = this.changeTimeFrame.bind(this);
@@ -97,7 +101,7 @@ class Home extends React.Component {
                   value={this.state.energy}
                   slideStop={this.changeSliderValue.bind(this, "energy")}
                   step={this.state.step}
-                  max={10}
+                  max={100}
                   min={0}
                   orientation="horizontal"
                 />
@@ -111,7 +115,7 @@ class Home extends React.Component {
                   value={this.state.dance}
                   slideStop={this.changeSliderValue.bind(this, "dance")}
                   step={this.state.step}
-                  max={10}
+                  max={100}
                   min={0}
                   orientation="horizontal"
                 />
@@ -127,7 +131,7 @@ class Home extends React.Component {
                   value={this.state.acoustic}
                   slideStop={this.changeSliderValue.bind(this, "acoustic")}
                   step={this.state.step}
-                  max={10}
+                  max={100}
                   min={0}
                   orientation="horizontal"
                 />
@@ -141,7 +145,7 @@ class Home extends React.Component {
                   value={this.state.popular}
                   slideStop={this.changeSliderValue.bind(this, "popular")}
                   step={this.state.step}
-                  max={10}
+                  max={100}
                   min={0}
                   orientation="horizontal"
                 />
@@ -210,23 +214,21 @@ class Home extends React.Component {
   changeSliderValue(type, event) {
     switch (type) {
       case "energy":
-        this.setState({ energy: event.target.value });
+        this.setState({ energy: event.target.value, energyChanged: true });
         break;
       case "dance":
-        this.setState({ dance: event.target.value });
+        this.setState({ dance: event.target.value, danceChanged: true });
         break;
       case "acoustic":
-        this.setState({ acoustic: event.target.value });
+        this.setState({ acoustic: event.target.value, acousticChanged: true });
         break;
       case "popular":
-        this.setState({ popular: event.target.value });
+        this.setState({ popular: event.target.value, popularChanged: true });
+        break;
+      default:
         break;
     }
   }
-  // changeSliderValue = (value) => {
-  //   console.log("here");
-  //   this.setState({ energy: value });
-  // };
 
   getColor(index) {
     //var colors = ["#8AFA82", "#FF5AD1", "#9046CF"];
@@ -246,6 +248,8 @@ class Home extends React.Component {
         break;
       case "All Time":
         apiTimeFrame = "long_term";
+        break;
+      default:
         break;
     }
     spotifyApi
@@ -274,16 +278,16 @@ class Home extends React.Component {
   }
 
   setFilters(seedObj) {
-    if (this.state.energy !== null) {
-      seedObj.target_energy = this.state.energy / 10;
+    if (this.state.energyChanged) {
+      seedObj.target_energy = this.state.energy / 100;
     }
-    if (this.state.dance !== null) {
-      seedObj.target_danceability = this.state.dance / 10;
+    if (this.state.danceChanged) {
+      seedObj.target_danceability = this.state.dance / 100;
     }
-    if (this.state.acoustic !== null) {
-      seedObj.target_acousticness = this.state.acoustic / 10;
+    if (this.state.acousticChanged) {
+      seedObj.target_acousticness = this.state.acoustic / 100;
     }
-    if (this.state.popular !== null) {
+    if (this.state.popularChanged) {
       seedObj.target_popularity = this.state.popular;
     }
     return seedObj;
@@ -297,7 +301,6 @@ class Home extends React.Component {
     seedObj = this.setFilters(seedObj);
     var reccTrack = "";
     spotifyApi.getRecommendations(seedObj).then((response) => {
-      //console.log(trackTitle, ": ", response.tracks[0]?.name);
       if (response.tracks[0] !== undefined) {
         reccTrack = {
           title: response.tracks[0].name,
@@ -318,19 +321,28 @@ class Home extends React.Component {
         const list = [...state.reccTracks];
         const topTrack = state.topTracks[index];
         list.splice(index, 1, { top: topTrack, rec: reccTrack });
-        //const list = [...state.reccTracks, reccTrack];
+
         return { reccTracks: list };
       });
     });
   }
   makePlaylist() {
+    var energy = this.state.energyChanged
+      ? `energy: ${this.state.energy}, `
+      : "";
+    var dance = this.state.danceChanged ? `dance: ${this.state.dance}, ` : "";
+    var popular = this.state.popularChanged
+      ? `popular: ${this.state.popular}, `
+      : "";
+    var acoustic = this.state.acousticChanged
+      ? `acoustic: ${this.state.acoustic}, `
+      : "";
     var options = {
       name: "new faves",
-      description: `a playlist of songs reccomended based on your listening habits and the following filters: time range: ${this.state.timeFrame}, energy: ${this.state.energy}, danceability: ${this.state.dance}, acousticness: ${this.state.acoustic}, popularity: ${this.state.popular}`,
+      description: `a playlist of songs reccomended based on your listening habits and the following filters: time range: ${this.state.timeFrame}, ${energy}${dance}${acoustic}${popular}`,
     };
     this.getUris();
     var token = this.getHashParams().access_token;
-    console.log(options.description);
     var playlistId = "";
     var userId = "";
     spotifyApi.setAccessToken(token);
@@ -340,7 +352,6 @@ class Home extends React.Component {
         spotifyApi.getUserPlaylists().then((response) => {
           playlistId = response.items[0].id;
           var uris = this.getUris();
-          console.log(uris);
           spotifyApi.addTracksToPlaylist(playlistId, uris);
         });
       });
@@ -349,7 +360,6 @@ class Home extends React.Component {
 
   getUris() {
     var trackIds = this.state.reccTracks.map((item) => item.rec.id);
-    console.log(trackIds);
     return trackIds
       .map((trackId) => `spotify:track:${trackId}`)
       .filter((trackId) => trackId !== "spotify:track:1234");

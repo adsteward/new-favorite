@@ -10,6 +10,10 @@
     "querystring": "~0.2.0",
     "request": "~2.83.0"
   },
+  "engines": {
+    "node": "12.x",
+    "npm": "6.x"
+  },
   "scripts": {
     "start": "node app.js",
     "heroku-postbuild": "cd my-client && npm install && npm run build"
